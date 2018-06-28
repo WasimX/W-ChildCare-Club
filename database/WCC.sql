@@ -147,6 +147,7 @@ CREATE TABLE `management` (
   `fname` varchar(20) DEFAULT NULL,
   `lname` varchar(20) DEFAULT NULL,
   `username` varchar(20) DEFAULT NULL,
+  `job_role` varchar(20) DEFAULT NULL,
   `password` varchar(20) DEFAULT NULL,
   `pLevel` int(1) DEFAULT NULL,
   `last_login` datetime NOT NULL,
@@ -158,6 +159,7 @@ CREATE TABLE `management` (
   `NI` varchar(9) DEFAULT NULL,
   `DBS_no` varchar(3) DEFAULT NULL,
   `hourly_pay` int(5) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
   `date_join` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -214,8 +216,7 @@ CREATE TABLE `salary_m` (
   `tdate` date NOT NULL,
   `method` varchar(10) DEFAULT NULL,
   `period` varchar(10) DEFAULT NULL,
-  `overtime` int(2) DEFAULT NULL,
-  `NI` int(9) DEFAULT NULL
+  `overtime` int(2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
