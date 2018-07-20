@@ -1275,6 +1275,7 @@ table.table-inbox tbody tr.checked {background-color: #ffffcc;}
 	.page-title-box {display:none;}
 	.sidebar {margin-left: -225px;width: 225px;}
 	.page-wrapper {margin-left: 0;padding-left: 0;padding-right: 0;}
+	.slide-nav-toggle .sidebar {margin-left: 0;}
 	a.mobile_btn {color: #fff;font-size: 24px;height: 60px;left: 0;line-height: 60px;padding: 0 20px;position: absolute;top: 0;width: 60px;z-index: 10;}
 	.modal-open .modal.custom-modal {left: 0;top:0;}
 	.modal-backdrop.custom-backdrop.in {left: 0;}
