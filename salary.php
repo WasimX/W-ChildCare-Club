@@ -161,7 +161,9 @@
 											<div class="dropdown">
 												<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 												<ul class="dropdown-menu pull-right">
-													<li><a href="#edit=<?php echo $row['ID'] ?>" data-toggle="modal" data-target="#edit_salary" data- title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+													<li>
+													<a rel="<?php echo $id ?>" href="javascript:void(0)" class="edit_link"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+													
 													</li>
 													<li>
 														<a rel="<?php echo $id ?>" href="javascript:void(0)" class="delete_link"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
@@ -251,20 +253,32 @@
 
 		<?php
 
-		if ( isset( $_POST[ 'edit' ] ) ) {
-			$id = $_POST[ 'edit_id' ];
-			$hours = strip_tags( $_POST[ 'hours' ] );
-			$method = strip_tags( $_POST[ 'method' ] );
-			$period = strip_tags( $_POST[ 'period' ] );
-			$overtime = strip_tags( $_POST[ 'overtime' ] );
+			if ( isset( $_GET[ 'edit' ] ) ) {
+				$idx = $_GET[ 'edit' ];
+		
 
-			mysqli_query( $connection, "UPDATE salary_m SET hours =  $hours,method = '$method', period = '$period', overtime =  $overtime WHERE sID = $id" )or die( mysqli_error( $connection ) );
+		$sql = "SELECT sID FROM salary_m WHERE sID = $idx";
 
-			mysqli_query( $connection, "UPDATE `salary_m` INNER JOIN `management` ON management.ID = salary_m.management_ID SET `salary_m`.amount = (`salary_m`.overtime + `salary_m`.hours) * `management`.hourly_pay" );
+		$raw_results = mysqli_query( $connection, $sql );
 
-			echo "Update has been added to the news page successfully.";
-		}
-		?>
+		while ( $row = mysqli_fetch_array( $raw_results ) ) {
+			$id = $row[ 'sID' ];
+
+
+			if ( isset( $_POST[ 'edit' ] ) ) {
+				$id = $_POST[ 'edit_id' ];
+				$hours = strip_tags( $_POST[ 'hours' ] );
+				$method = strip_tags( $_POST[ 'method' ] );
+				$period = strip_tags( $_POST[ 'period' ] );
+				$overtime = strip_tags( $_POST[ 'overtime' ] );
+
+				mysqli_query( $connection, "UPDATE salary_m SET hours =  $hours,method = '$method', period = '$period', overtime =  $overtime WHERE sID = $id" )or die( mysqli_error( $connection ) );
+
+				mysqli_query( $connection, "UPDATE `salary_m` INNER JOIN `management` ON management.ID = salary_m.management_ID SET `salary_m`.amount = (`salary_m`.overtime + `salary_m`.hours) * `management`.hourly_pay" );
+
+				echo "Update has been added to the news page successfully.";
+			}
+			?>
 
 		<div id="edit_salary" class="modal custom-modal fade" role="dialog">
 			<div class="modal-dialog">
@@ -275,10 +289,10 @@
 					</div>
 					<div class="modal-body">
 						<form action="" method="post">
-							<input type="hidden" name="edit_id" value="<?php echo $id; ?>">
+							<input type="hidden" name="edit_id" value="<?php echo $idx; ?>">
 
 							<div class="form-group">
-								<label> Hours <?php echo $row['s_id']; ?> </label>
+								<label> Hours </label>
 								<input class="form-control" type="text" name="hours">
 							</div>
 							<div class="form-group">
@@ -296,16 +310,19 @@
 								<label> Overtime (If applicable)</label>
 								<input class="form-control" type="text" name="overtime"> </div>
 							<div class="m-t-20 text-center">
-								<button class="btn btn-primary" name="edit">Save & Update</button>
+								<button class="btn btn-primary edit_linkx" name="edit">Save & Update</button>
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-
+		<?php } }?>
+		
+		
+		
 		<!-- DELETE SALARY-->
-		<div id="xdelete_salary" class="modal custom-modal fade" role="dialog">
+		<div id="delete_salary" class="modal custom-modal fade" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content modal-md">
 					<div class="modal-header">
@@ -339,7 +356,18 @@
 				var id = $( this ).attr( "rel" );
 				var delete_url = "salary.php?id=" + id + " ";
 				$( ".delete_linkx" ).attr( "href", delete_url );
-				$( "#xdelete_salary" ).modal( "show" );
+				$( "#delete_salary" ).modal( "show" );
+			} );
+		} );
+	</script>
+	
+		<script>
+		$( document ).ready( function () {
+			$( ".edit_link" ).on( 'click', function () {
+				var id = $( this ).attr( "rel" );
+				var url = "salary.php?edit=" + id + " ";
+				$( ".edit_linkx" ).attr( "href", url );
+				$( "#edit_salary" ).modal( "show" );
 			} );
 		} );
 	</script>
