@@ -155,7 +155,7 @@
 										<td>
 											<?php echo $row ['amount']; ?>
 										</td>
-										<td><a class="btn btn-xs btn-primary" href="salary-view.php">Generate Slip</a>
+										<td><a class="btn btn-xs btn-primary" href="salary_view.php?id=<?php echo $id?> ">Generate Slip</a>
 										</td>
 										<td class="text-right">
 											<div class="dropdown">
@@ -189,8 +189,10 @@
 		$method = addslashes( strip_tags( $_POST[ 'method' ] ) );
 		$period = addslashes( strip_tags( $_POST[ 'period' ] ) );
 		$ovetime = addslashes( strip_tags( $_POST[ 'overtime' ] ) );
+	$random = rand(100000,999999);
+	
 
-		$query = mysqli_query( $connection, "INSERT INTO `salary_m` ( `sID`, `management_ID`, `hours`, `tdate`, `method`, `period`, `overtime`) VALUES ('', '$management', '$hours', '$date', '$method','$period','$ovetime')" )or die( mysqli_error( $connection ) );
+		$query = mysqli_query( $connection, "INSERT INTO `salary_m` ( `sID`, `management_ID`, `hours`, `tdate`, `method`, `period`, `overtime`) VALUES ('$random', '$management', '$hours', '$date', '$method','$period','$ovetime')" )or die( mysqli_error( $connection ) );
 	
 		$query2 = mysqli_query ($connection, "UPDATE `salary_m` INNER JOIN `management` ON management.sID = salary_m.management_ID SET `salary_m`.amount = (`salary_m`.overtime + `salary_m`.hours) * `management`.hourly_pay");
 	
@@ -329,14 +331,13 @@
 		mysqli_query( $connection, "DELETE FROM salary_m WHERE sID = $id" )or die( mysqli_error( $connection ) );
 		echo "Update has been added to the news page successfully.";
 	}
-
 	?>
 
 	<script>
 		$( document ).ready( function () {
 			$( ".delete_link" ).on( 'click', function () {
 				var id = $( this ).attr( "rel" );
-				var delete_url = "salary_m.php?id=" + id + " ";
+				var delete_url = "salary.php?id=" + id + " ";
 				$( ".delete_linkx" ).attr( "href", delete_url );
 				$( "#xdelete_salary" ).modal( "show" );
 			} );

@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 	<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-	<title>Registration</title>
+	<title>Mailer</title>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
@@ -37,361 +37,196 @@
 						<li>
 							<span class="title">Mailing List</span>
 							<span class="text">
-							<a class="btn btn-xs btn-primary" href="#" data-toggle="modal" data-target="#add_parent">Form</a></span>				
+							<a class="btn btn-xs btn-primary" href="#" data-toggle="modal" data-target="#mail_list">Form</a></span>
+						
 						</li>
-
 						<li>
 							<span class="title">Send Message</span>
 							<span class="text">
-							<a class="btn btn-xs btn-primary" href="#" data-toggle="modal" data-target="#add_student">Form</a></span>					
+							<a class="btn btn-xs btn-primary" href="#" data-toggle="modal" data-target="#message">Form</a></span>
+						
 						</li>
 						<li>
 							<span class="title">Mass Message</span>
 							<span class="text">
-							<a class="btn btn-xs btn-primary" href="#" data-toggle="modal" data-target="#add_management">Form</a></span>						
+							<a class="btn btn-xs btn-primary" href="#" data-toggle="modal" data-target="#mass_message">Form</a></span>
+						
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
-
-
-
-
-
-		<!-- Parent -->
-
-		<div id="add_parent" class="modal custom-modal fade" role="dialog">
+		<div id="mail_list" class="modal custom-modal fade" role="dialog">
 			<div class="modal-dialog">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<div class="modal-content modal-lg">
 					<div class="modal-header">
-						<h4 class="modal-title">Add Parent</h4>
+						<h4 class="modal-title"> Mailing List</h4>
 					</div>
 					<div class="modal-body">
-					
-					
-						<form>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>First Name</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Last Name</label>
-											<input class="form-control" type="text">
-										</div>
+						<form method="post">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Name</label>
+										<input class="form-control" type="text" name="name">
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Username</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Password</label>
-											<input class="form-control" type="text">
-										</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Email Address</label>
+										<input class="form-control" type="text" name="address">
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-									  <div class="form-group"></div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Email</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">Home number
-										  <input class="form-control" type="text">
-										</div>
-									</div> 
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Mobile</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">Emergancy Number</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">Address
-										  <input class="form-control" type="text">
-										</div>
-									</div>
-								</div>
-							  <div class="row">
-									<div class="col-md-6">
-										<div class="form-group">Postode</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">Sort Code
-										  <input class="form-control" type="text">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Account Number</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label>Date Joined</label>
-									<input class="form-control" type="text">
-								</div>
-								<div class="m-t-20 text-center"></div>
-							</form>
-						
-						
+							</div>
+							<div class="m-t-20 text-center">
+								<button class="btn btn-primary" name="submit_mail">Add to List</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
+		<?php if ( isset( $_POST[ 'submit_mail' ] ) ) {
 
+		$name = addslashes( strip_tags( $_POST[ 'name' ] ) );
+		$address = addslashes( strip_tags( $_POST[ 'address' ] ) );
 
-		<!-- Student -->
-
-		<div id="add_student" class="modal custom-modal fade" role="dialog">
+		$query = mysqli_query( $connection, "INSERT INTO `mail_list`(`name`, `email`) VALUES ('$name','$address')" )or die( mysqli_error( $connection ) );
+}
+	?>
+		<div id="message" class="modal custom-modal fade" role="dialog">
 			<div class="modal-dialog">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<div class="modal-content modal-lg">
 					<div class="modal-header">
-						<h4 class="modal-title">Add Student</h4>
+						<h4 class="modal-title">Custom Mailer</h4>
 					</div>
 					<div class="modal-body">
-					
-							<form>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>First Name</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Last Name</label>
-											<input class="form-control" type="text">
-										</div>
+						<form method="post">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Email Address</label>
+										<input class="form-control" type="text" name="email">
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-										  <label>Age</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-							  </div>
-								<div class="row">
-									<div class="col-md-6">
-									  <div class="form-group">Medical Description
-									    <input class="form-control" type="text">
-									  </div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">Nationality
-										  <input class="form-control" type="text">
-										</div>
-									</div>
-							  </div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">Ethnicity
-										  <input class="form-control" type="text">
-									  </div>
-									</div> 
-									<div class="col-md-6">
-										<div class="form-group">Nationaliy	
-										  <input class="form-control" type="text">
-									  </div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Subject</label>
+										<input class="form-control" type="text" name="subject">
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">Gender
-										  <input class="form-control" type="text">
-									  </div>
-									</div>
-								  <div class="col-md-6">
-										<div class="form-group">
-										  <p>Special needs
-										  <input class="form-control" type="text">
-										  </p>
-									  </div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Message</label>
+										<textarea class="form-control" rows="6" name="message"></textarea>
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">Date Joined
-										  <input class="form-control" type="text">
-									  </div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group"></div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label>Upload Picture</label>
-									<input class="form-control" type="file">
-								</div>
-								<div class="m-t-20 text-center"></div>
-							</form>
-						
-						
-						
+							</div>
+							<div class="m-t-20 text-center">
+								<button class="btn btn-primary" type="submit" name="submit_dir">Send</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
+		<?php
+		if ( isset( $_POST[ 'submit_dir' ] ) ) {
 
-		<!-- Management -->
+			$email = $_POST[ 'email' ];
+			$subject = $_POST[ 'subject' ];
+			$date = date( 'Y-m-d H:i:s' );
+			$message = $_POST[ 'message' ];
+			
+			mysqli_query ($connection , "INSERT INTO `email_log`(`email`, `subject`, `message`, `date_sent`) VALUES ('$email','$subject','$message','$date')");
 
-		<div id="add_management" class="modal custom-modal fade" role="dialog">
+			mail( $email, $subject, $message, 'From: No Reply <NoReply@WChildCare.co.uk>' );
+
+			echo "Message Sent!";
+		}
+		?>
+
+		<div id="mass_message" class="modal custom-modal fade" role="dialog">
 			<div class="modal-dialog">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<div class="modal-content modal-lg">
 					<div class="modal-header">
-						<h4 class="modal-title">Add Staff</h4>
+						<h4 class="modal-title">Mass Mailer</h4>
 					</div>
-						
-							<form>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>First Name</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Last Name</label>
-											<input class="form-control" type="text">
-										</div>
+					<div class="modal-body">
+						<form method="post">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Subject</label>
+										<input class="form-control" type="text" name="subject">
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Username</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Password</label>
-											<input class="form-control" type="text">
-										</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>Message</label>
+										<textarea class="form-control" name="message"></textarea>
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-									  <div class="form-group">
-											<label>Job Role</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Email</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Address</label>
-											<input class="form-control" type="text">
-										</div>
-									</div> 
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Postcode</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Home Number</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Mobile Number</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>National Insurance Number</label>
-											<input class="form-control" type="text">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>DBS check</label>
-											<select class="select">
-												<option>Yes</option>
-												<option>No</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Permission</label>
-											<select class="select">
-												<option>Management</option>
-												<option>Staff</option>
-												<option>Perant</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label>Upload Files</label>
-									<input class="form-control" type="file">
-								</div>
-								<div class="m-t-20 text-center">
-									<button class="btn btn-primary">Create Account</button>
-								</div>
-							</form>
-							
+							</div>
+							<div class="m-t-20 text-center">
+								<button class="btn btn-primary" name="submit_mass">Send</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
+		<?php
+
+		if ( isset( $_POST[ 'submit_mass' ] ) ) {
+
+			$sql = "SELECT email FROM mail_list";
+			$dbemail = mysqli_query( $connection, $sql );
+
+			while ( $row = mysqli_fetch_array( $dbemail ) ) {
+
+				$email_array[] = $row[ 'email' ];
+
+			}
+
+			$email = implode( ", ", $email_array );
+			echo $email;
+
+			$subject = $_POST[ 'subject' ];
+			$message = $_POST[ 'message' ];
+			$date = date( 'Y-m-d H:i:s' );
+
+			$message_body = "<p>$message</p>"; //create HTML Email
+
+			// Always set content-type when sending HTML email
+			$headers = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+			// More headers
+			$headers .= 'From: No Reply <NoReply@WChildCare.co.uk>' . "\r\n";
+
+			
+				mysqli_query ($connection , "INSERT INTO `email_log`(`email`, `subject`, `message`, `date_sent`) VALUES ('$email','$subject','$message','$date')");
+
+			
+			mail( $email, $subject, $message_body, $headers );
+
+			echo "Mail Sent!";
+		}
+		?>
+
 	</div>
-
 
 	<div class="sidebar-overlay" data-reff="#sidebar"></div>
 	<script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
@@ -403,8 +238,5 @@
 	<script type="text/javascript" src="assets/js/moment.min.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap-datetimepicker.min.js"></script>
 	<script type="text/javascript" src="assets/js/app.js"></script>
-
-
 </body>
-
 </html>
