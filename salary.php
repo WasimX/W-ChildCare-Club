@@ -27,9 +27,9 @@
 				<form action="" method="POST">
 					<div class="row">
 						<div class="col-xs-4">
-							<h4 class="page-title">Employee Salary</h4>
+							<h4 class="page-title">Employee Wages</h4>
 						</div>
-						<div class="col-xs-8 text-right m-b-30"><a href="#" class="btn btn-primary rounded pull-right" data-toggle="modal" data-target="#add_salary"><em class="fa fa-plus"></em> Add Salary</a>
+						<div class="col-xs-8 text-right m-b-30"><a href="#" class="btn btn-primary rounded pull-right" data-toggle="modal" data-target="#add_salary"><em class="fa fa-plus"></em> Add Wage</a>
 						</div>
 					</div>
 					<div class="row filter-row">
@@ -88,12 +88,12 @@
 							<table class="table table-striped custom-table datatable">
 								<thead>
 									<tr>
-										<th>Salary ID</th>
+										<th>Wage ID</th>
 										<th style="width:30%;">Employee</th>
 										<th>Role</th>
 										<th>Period</th>
 										<th>Date</th>
-										<th>Salary</th>
+										<th>Wage</th>
 										<th>Payslip</th>
 										<th class="text-right">Action</th>
 									</tr>
@@ -101,15 +101,15 @@
 								<tbody>
 									<?php
 									if ( isset( $_POST[ 'search' ] ) ) {
-										$fname = mysqli_real_escape_string ( $_POST[ 'fname' ] );
-										$lname = mysqli_real_escape_string ( $_POST[ 'lname' ] );
-										$role = mysqli_real_escape_string ( $_POST[ 'role' ] );
+										$fname = addslashes ( $_POST[ 'fname' ] );
+										$lname = addslashes ( $_POST[ 'lname' ] );
+										$role = addslashes ( $_POST[ 'role' ] );
 
-										$from_date = mysqli_real_escape_string ( $_POST[ 'date_from' ] );
+										$from_date = addslashes ( $_POST[ 'date_from' ] );
 										$fdate = str_replace( '/', '-', $from_date );
 										$fdate = date( 'Y-m-d', strtotime( $fdate ) );
 
-										$to_date = mysqli_real_escape_string ( $_POST[ 'date_to' ] );
+										$to_date = addslashes ( $_POST[ 'date_to' ] );
 										$tdate = str_replace( '/', '-', $to_date );
 										$tdate = date( 'Y-m-d', strtotime( $tdate ) );
 
@@ -177,14 +177,14 @@
 											<button type="button" class="close" data-dismiss="modal">&times;</button>
 											<div class="modal-content modal-lg">
 												<div class="modal-header">
-													<h4 class="modal-title">Update Staff Salary</h4>
+													<h4 class="modal-title">Update Emplyee Wage</h4>
 												</div>
 												<div class="modal-body">
 													<form action="salary.php" method="POST">
 														<input type="hidden" name="edit_id" value="<?php echo $id ?>">
 
 														<div class="form-group">
-															<label> Salary ID </label>
+															<label> Wage ID </label>
 															<input class="form-control" type="text" placeholder="<?php echo $id ?>" readonly>
 														</div>
 
@@ -201,7 +201,7 @@
 															</select>
 														</div>
 														<div class="form-group">
-															<label> Period </label>
+															<label> Period (Month) </label>
 															<input class="form-control" type="text" name="period"> </div>
 														<div class="form-group">
 															<label> Overtime (If applicable)</label>
@@ -219,7 +219,7 @@
 										<div class="modal-dialog">
 											<div class="modal-content modal-md">
 												<div class="modal-header">
-													<h4 class="modal-title">Delete Salary</h4>
+													<h4 class="modal-title">Delete Wage</h4>
 												</div>
 												<div class="modal-body card-box">
 													<form method="post" action="salary.php">
@@ -239,11 +239,11 @@
 									}
 							
 									if ( isset( $_POST[ 'edit' ] ) ) {
-										$id =  mysqli_real_escape_string ($_POST[ 'edit_id' ]);
-										$hours = mysqli_real_escape_string (strip_tags( $_POST[ 'hours' ] ));
-										$method = mysqli_real_escape_string (strip_tags( $_POST[ 'method' ] ));
-										$period = mysqli_real_escape_string (strip_tags( $_POST[ 'period' ] ));
-										$overtime = mysqli_real_escape_string (strip_tags( $_POST[ 'overtime' ] ));
+										$id =  addslashes ($_POST[ 'edit_id' ]);
+										$hours = addslashes (strip_tags( $_POST[ 'hours' ] ));
+										$method = addslashes (strip_tags( $_POST[ 'method' ] ));
+										$period = addslashes (strip_tags( $_POST[ 'period' ] ));
+										$overtime = addslashes (strip_tags( $_POST[ 'overtime' ] ));
 
 											if ( empty( $hours ) || empty( $method ) || empty( $period ) || empty( $overtime ) ) {
 												echo "<br /><font color='red'>Please complete all fields.</font><br />";
@@ -275,12 +275,12 @@
 
 									if ( isset( $_POST[ 'submit' ] ) ) {
 
-										$management = mysqli_real_escape_string (strip_tags( $_POST[ 'management' ] ) );
-										$hours = mysqli_real_escape_string( strip_tags( $_POST[ 'hours' ] ) );
+										$management = addslashes (strip_tags( $_POST[ 'management' ] ) );
+										$hours = addslashes( strip_tags( $_POST[ 'hours' ] ) );
 										$date = date( 'Y-m-d h:i:s' );
-										$method = mysqli_real_escape_string( strip_tags( $_POST[ 'method' ] ) );
-										$period = mysqli_real_escape_string( strip_tags( $_POST[ 'period' ] ) );
-										$overtime = mysqli_real_escape_string( strip_tags( $_POST[ 'overtime' ] ) );
+										$method = addslashes( strip_tags( $_POST[ 'method' ] ) );
+										$period = addslashes( strip_tags( $_POST[ 'period' ] ) );
+										$overtime = addslashes( strip_tags( $_POST[ 'overtime' ] ) );
 										$random = rand( 100000, 999999 );
 
 											if ( empty( $hours ) || empty( $method ) || empty( $period ) || empty( $overtime ) ) {
@@ -300,7 +300,6 @@
 										echo "<br /><font color='green'>Record has been added</font><br />";
 											}
 									}
-									
 									?>
 								</tbody>
 							</table>
@@ -316,12 +315,12 @@
 			<button type="button" class="close" data-dismiss="modal">&times;</button>
 			<div class="modal-content modal-lg">
 				<div class="modal-header">
-					<h4 class="modal-title">Add Staff Salary</h4>
+					<h4 class="modal-title">Add Employee Salary</h4>
 				</div>
 				<div class="modal-body">
 					<form action="" method="post">
 						<div class="form-group">
-							<label>Select Staff</label>
+							<label>Select Employee</label>
 							<select class="select" name="management">
 								<?php $result = mysqli_query($connection, "SELECT `ID`, `fname`, `lname` FROM `management`");
 											while ( $row = mysqli_fetch_array( $result ) ) {
@@ -333,7 +332,7 @@
 						</div>
 						<div class="form-group">
 							<label> Hours </label>
-							<input class="form-control" type="text" name="hours">
+							<input class="form-control" type="text" name="hours" maxlength="2">
 						</div>
 						<div class="form-group">
 							<label> Method </label>
@@ -343,11 +342,11 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label> Period </label>
+							<label> Period (Month)</label>
 							<input class="form-control" type="text" name="period"> </div>
 						<div class="form-group">
 							<label> Overtime (If applicable)</label>
-							<input class="form-control" type="text" name="overtime"> </div>
+							<input class="form-control" type="text" name="overtime" maxlength="2"> </div>
 						<div class="m-t-20 text-center">
 							<button class="btn btn-primary" name="submit" type="submit">Create Salary</button>
 						</div>
@@ -386,4 +385,5 @@
 	<script type="text/javascript" src="assets/js/bootstrap-datetimepicker.min.js"></script>
 	<script type="text/javascript" src="assets/js/app.js"></script>
 </body>
+
 </html>
