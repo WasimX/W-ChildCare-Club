@@ -101,15 +101,15 @@
 								<tbody>
 									<?php
 									if ( isset( $_POST[ 'search' ] ) ) {
-										$fname = addslashes ( $_POST[ 'fname' ] );
-										$lname = addslashes ( $_POST[ 'lname' ] );
-										$role = addslashes ( $_POST[ 'role' ] );
+										$fname = addslashes( $_POST[ 'fname' ] );
+										$lname = addslashes( $_POST[ 'lname' ] );
+										$role = addslashes( $_POST[ 'role' ] );
 
-										$from_date = addslashes ( $_POST[ 'date_from' ] );
+										$from_date = addslashes( $_POST[ 'date_from' ] );
 										$fdate = str_replace( '/', '-', $from_date );
 										$fdate = date( 'Y-m-d', strtotime( $fdate ) );
 
-										$to_date = addslashes ( $_POST[ 'date_to' ] );
+										$to_date = addslashes( $_POST[ 'date_to' ] );
 										$tdate = str_replace( '/', '-', $to_date );
 										$tdate = date( 'Y-m-d', strtotime( $tdate ) );
 
@@ -247,16 +247,15 @@
 
 											if ( empty( $hours ) || empty( $method ) || empty( $period ) || empty( $overtime ) ) {
 												echo "<br /><font color='red'>Please complete all fields.</font><br />";
-											} elseif ( preg_match( "[0-9]", $hours ) ) {
+											} elseif ( !preg_match_all( "/[0-9]/m", $hours ) ) {
 												echo "<br /><font color='red'>Hours requires numbers only.</font><br />";
-											} elseif ( preg_match( "[0-9]", $overtime ) ) {
+											} elseif ( !preg_match_all( "/[0-9]/m", $overtime ) ) {
 												echo "<br /><font color='red'>Overtime requires numbers only.</font><br />";
-											} elseif ( preg_match( "[0-9a-zA-Z]", $period ) ) {
+											} elseif ( !preg_match_all( "/[0-9a-zA-Z]/m", $period ) ) {
 												echo "<br /><font color='red'>Illegal Charaters found.</font><br />";
 											} 
 
 										else {
-											
 											mysqli_query( $connection, "UPDATE salary_m SET hours = $hours, method = '$method', period = '$period', overtime = $overtime WHERE sID = $id" )or die( mysqli_error( $connection ) );
 
 											mysqli_query( $connection, "UPDATE `salary_m` INNER JOIN `management` ON management.ID = salary_m.management_ID SET `salary_m`.amount = ((((`salary_m`.overtime + `salary_m`.hours) * `management`.hourly_pay) * 52) /12)" );
@@ -285,11 +284,11 @@
 
 											if ( empty( $hours ) || empty( $method ) || empty( $period ) || empty( $overtime ) ) {
 												echo "<br /><font color='red'>Please complete all fields.</font><br />";
-											} elseif ( preg_match( "[0-9]", $hours ) ) {
+											} elseif ( !preg_match_all( "/[0-9]/m", $hours ) ) {
 												echo "<br /><font color='red'>Hours requires numbers only.</font><br />";
-											} elseif ( preg_match( "[0-9]", $overtime ) ) {
+											} elseif ( !preg_match_all( "/[0-9]/m", $overtime ) ) {
 												echo "<br /><font color='red'>Overtime requires numbers only.</font><br />";
-											} elseif ( preg_match( "[0-9a-zA-Z]", $period ) ) {
+											} elseif ( !preg_match_all( "/[0-9a-zA-Z]/m", $period ) ) {
 												echo "<br /><font color='red'>Illegal Charaters found.</font><br />";
 											} else {
 											
