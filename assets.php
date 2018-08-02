@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -6,7 +6,6 @@
 	include_once "database/db.php";
 	include( "navigation.php" );
 	?>
-
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 	<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
@@ -18,10 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<!--[if lt IE 9]>
-    <script src="assets/js/html5shiv.min.js"></script>
-    <script src="assets/js/respond.min.js"></script>
-    <![endif]-->
+	<script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
@@ -41,9 +37,8 @@
 						<div class="col-sm-3 col-md-2 col-xs-6">
 							<div class="form-group form-focus">
 								<label class="control-label">First Name</label>
-								<input type="text" name="fname" class="form-control floating"/>
+								<input name="fname" type="text" class="form-control floating"/>
 							</div>
-
 						</div>
 						<div class="col-sm-3 col-md-2 col-xs-6">
 							<div class="form-group form-focus">
@@ -54,19 +49,17 @@
 						<div class="col-sm-3 col-md-2 col-xs-6">
 							<div class="form-group form-focus select-focus">
 								<label class="control-label">Role</label>
-								<select class="select floating" name="role">
+								<select name="role" class="select floating">
 									<option value=""> -- Select -- </option>
 									<?php
 									$query = mysqli_query( $connection, "SELECT DISTINCT job_role FROM management" );
 
 									while ( $row = mysqli_fetch_array( $query ) ) {
-										$job = $row[ 'job_role' ];
+										$job = addslashes( $row[ 'job_role' ] );
 										?>
-
 									<option value="<?php echo $job ?>">
 										<?php echo $job ?>
 									</option>
-
 									<?php } ?>
 								</select>
 							</div>
@@ -90,8 +83,6 @@
 						</div>
 					</div>
 				</form>
-
-
 				<div class="row">
 					<div class="col-md-12">
 						<div class="table-responsive">
@@ -103,8 +94,8 @@
 										<th>Asset Name</th>
 										<th>Manufacture</th>
 										<th>Purchase Date</th>
-										<th>Warrenty</th>
-										<th>Warrenty End</th>
+										<th>Warranty</th>
+										<th>Warranty End</th>
 										<th>Payment Method</th>
 										<th>Amount</th>
 										<th class="text-center">Status</th>
@@ -112,61 +103,271 @@
 									</tr>
 								</thead>
 								<tbody>
-
 									<?php
-
 									$raw_results = mysqli_query( $connection, "SELECT * FROM `assets`" );
-
 									while ( $row = mysqli_fetch_array( $raw_results ) ) {
 
+										$id = $row[ 'ID' ];
+										$itemname = $row[ 'item_name' ];
+										$manufacturer = $row[ 'manufacture' ];
+										$t_date = $row[ 'date' ]; //purchase date
+										$tdate = date( 'd-m-Y', strtotime( $t_date ) );
+										$warranty = $row[ 'warranty' ];
+										$warend = $row[ 'warranty_end' ];
+										$warend = date( 'd-m-Y', strtotime( $warend ) );
+										$method = $row[ 'method' ];
+										$worth = $row[ 'worth' ];
+										$status = $row[ 'status' ];
+										$mID = $row[ 'management_ID' ];
+										$purchase_from = $row[ 'purchase_from' ];
+										$model = $row[ 'model' ];
+										$sn = $row[ 's/n' ];
+										$condition = $row[ 'condition' ];
+										$desc = $row[ 'description' ];
 										?>
-
-
 									<tr>
 										<td>
-											<?php echo $row['ID']; ?>
+											<?php echo $id; ?>
 										</td>
 										<td>
 											<strong>
-												<?php echo $row['item_name']; ?>
+												<?php echo $itemname; ?>
 											</strong>
 										</td>
 										<td>
-											<?php echo $row['manufacture']; ?>
+											<?php echo $manufacturer; ?> </td>
+										<td>
+											<?php echo $tdate; ?>
 										</td>
 										<td>
-											<?php echo $row['date']; ?>
+											<?php echo $warranty; ?>
 										</td>
 										<td>
-											<?php echo $row['warrenty']; ?>
+											<?php echo $warend; ?>
 										</td>
 										<td>
-											<?php echo $row['warrenty_end']; ?>
+											<?php echo $method; ?>
 										</td>
 										<td>
-											<?php echo $row['method']; ?>
-										</td>
-										<td>
-											<?php echo $row['worth']; ?>
+											<?php echo $worth; ?>
 										</td>
 										<td class="text-center">
 											<div class="dropdown action-label">
-												<?php echo $row['status']; ?>
+												<?php echo $status; ?>
 											</div>
 										</td>
 										<td class="text-right">
 											<div class="dropdown">
 												<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 												<ul class="dropdown-menu pull-right">
-													<li><a href="#edit=<?php echo $row['ID'] ?>" title="Edit" data-toggle="modal" data-target="#edit_asset"><i class="fa fa-pencil m-r-5"></i> Edit </a>
+													<li><a href="javascript:void(0)" data-toggle="modal" data-target="#edit_asset<?php echo $id ?>" data-title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
 													</li>
-													<li><a href="#" data-href="#id=<?php echo $row['ID']; ;?>" data-toggle="modal" data-target="#delete_asset" title="Delete"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+													<li><a href="javascript:void(0)" data-toggle="modal" data-target="#delete_asset<?php echo $id ?>" data-title="Delete"><i class="fa fa-trash-o m-r-5"></i> Delete </a>
 													</li>
 												</ul>
 											</div>
 										</td>
 									</tr>
-									<?php } ?>
+									<div id="edit_asset<?php echo $id ?>" class="modal custom-modal fade" role="dialog">
+										<div class="modal-dialog">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<div class="modal-content modal-md">
+												<div class="modal-header">
+													<h4 class="modal-title">Edit Asset</h4>
+												</div>
+												<div class="modal-body">
+													<form method="POST" action="assets.php">
+														<input type="hidden" name="edit_id" value="<?php echo $id; ?>">
+														<div class="row">
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Asset Name</label>
+																	<input class="form-control" name="aname" type="text" value="<?php echo $itemname ?>">
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Purchase Date</label>
+																	<div class="cal-icon"><input class="form-control datetimepicker" name="pdate" type="text" value="<?php echo $tdate ; ?>">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Purchase From</label>
+																	<input class="form-control" name="pfrom" type="text" value="<?php echo $purchase_from; ?>">
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Manufacturer</label>
+																	<input class="form-control" name="manufacturer" type="text" value="<?php echo $manufacturer; ?>">
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Model</label>
+																	<input class="form-control" name="model" type="text" value="<?php echo $model; ?>">
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Serial Number</label>
+																	<input class="form-control" name="sn" type="text" value="<?php echo $sn; ?>">
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Condition</label>
+																	<input class="form-control" name="condition" type="text" value="<?php echo $condition; ?>">
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Warranty</label>
+																	<input class="form-control" name="warranty" type="text" placeholder="In Months" value="<?php echo $warranty; ?>">
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Warranty End</label>
+																	<div class="cal-icon"><input class="form-control datetimepicker" name="warend" type="text" value="<?php echo $warend; ?>">
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Value</label>
+																	<input class="form-control" name="amount" type="text" value="<?php echo $worth; ?>">
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Payment Method - <?php echo $method; ?> </label>
+																	<select class="select floating" name="method" required="required">
+																		<option value=""> -- Select -- </option>
+																		<option value="Cash">Cash</option>
+																		<option value="Direct Debit">Direct Debit</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label>Description</label>
+																	<textarea class="form-control" name="desc">
+																		<?php echo $desc; ?>
+																	</textarea>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Status - <?php echo $status; ?></label>
+																	<select class="select" name="status" required="required">
+																		<option value=""> -- Select -- </option>
+																		<option value="Pending">Pending</option>
+																		<option value="Approved">Approved</option>
+																		<option value="Deployed">Deployed</option>
+																		<option value="Damaged">Damaged</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="m-t-20 text-center">
+															<button class="btn btn-primary" name="update" type="submit">Edit Asset</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="delete_asset<?php echo $id ?>" class="modal custom-modal fade" role="dialog">
+										<div class="modal-dialog">
+											<div class="modal-content modal-md">
+												<div class="modal-header">
+													<h4 class="modal-title">Delete Assets</h4>
+												</div>
+												<div class="modal-body card-box">
+													<form method="post" action="assets.php">
+														<input type="hidden" name="delete_id" value="<?php echo $id ?>">
+														<p>Are you sure want to delete this?</p>
+														<div class="m-t-20 text-left">
+															<a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+															<button type="submit" name="delete" class="btn btn-danger"></span> Delete</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php
+									}
+
+									if ( isset( $_POST[ 'update' ] ) ) {
+
+										$id = addslashes( $_POST[ 'edit_id' ] );
+										$aname = addslashes( $_POST[ 'aname' ] );
+										$pdate = addslashes( $_POST[ 'pdate' ] );
+										$pdate = date( "Y-m-d", strtotime( $pdate ) );
+										$pfrom = addslashes( $_POST[ 'pfrom' ] );
+										$manufacturer = addslashes( $_POST[ 'manufacturer' ] );
+										$model = addslashes( $_POST[ 'model' ] );
+										$sn = addslashes( $_POST[ 'sn' ] );
+										$condition = addslashes( $_POST[ 'condition' ] );
+										$warranty = addslashes( $_POST[ 'warranty' ] );
+										$warend = addslashes( $_POST[ 'warend' ] );
+										$warend = date( "Y-m-d", strtotime( $warend ) );
+										$amount = addslashes( $_POST[ 'amount' ] );
+										$method = addslashes( $_POST[ 'method' ] );
+										$desc = addslashes( $_POST[ 'desc' ] );
+										$status = addslashes( $_POST[ 'status' ] );
+
+										if ( empty( $aname ) || empty( $pdate ) || empty( $pfrom ) || empty( $manufacturer ) || empty( $model ) || empty( $sn ) || empty( $condition ) || empty( $warend ) || empty( $warranty ) || empty( $amount ) || empty( $method ) || empty( $desc ) || empty( $status ) ) {
+
+											echo "<br /><font color='red'>Please complete all fields.</font><br />";
+										} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $aname ) ) {
+											echo "<br /><font color='red'>Illegal characters found in Asset name text field.</font><br />";
+										} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $pfrom ) ) {
+											echo "<br /><font color='red'>Illegal characters found in purchase from text field.</font><br />";
+										} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $manufacturer ) ) {
+											echo "<br /><font color='red'>Illegal characters found in manufacture text field.</font><br />";
+										} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $model ) ) {
+											echo "<br /><font color='red'>Illegal characters found in model text field.</font><br />";
+										} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $sn ) ) {
+											echo "<br /><font color='red'>Illegal characters found in serial number text field.</font><br />";
+										} elseif ( !preg_match_all( "/[a-zA-Z]/m", $condition ) ) {
+											echo "<br /><font color='red'>Illegal characters found in condition text field.</font><br />";
+										} elseif ( !preg_match_all( "/[0-9]/m", $amount ) ) {
+											echo "<br /><font color='red'>Illegal characters found in value text field.</font><br />";
+										} elseif ( !preg_match_all( "/[0-9]/m", $warranty ) ) {
+											echo "<br /><font color='red'>Illegal characters found in warranty text field.</font><br />";
+										} else {
+											$sql = "UPDATE `assets` SET `item_name`= '$aname', `date`= '$pdate', `purchase_from`= '$pfrom', `model`= '$model', `manufacture`= '$manufacturer', `s/n`= '$sn', `condition`= '$condition', `warranty`= '$warranty', `method`= '$method', `warranty_end`= '$warend', `worth`= $amount, `description`= '$desc', `status`= '$status' WHERE ID = $id";
+
+											mysqli_query( $connection, $sql );
+
+											echo "<br /><font color='green'>Edit has been successful!</font><br />";
+										}
+									}
+
+									if ( isset( $_GET[ 'id' ] ) ) {
+										$delete_id = $_GET[ 'delete_id' ];
+										// sql to delete a record
+										mysqli_query( $connection, "DELETE FROM assets WHERE ID = $delete_id" )or die( mysqli_error( $connection ) );
+										echo "Update has been added to the news page successfully.";
+									}
+									?>
 								</tbody>
 							</table>
 						</div>
@@ -174,413 +375,196 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<?php 
+		if ( isset( $_POST[ 'add' ] ) ) {
 
-		<!--delete asset-->
+			$aname = $_POST[ 'aname' ];
+			$pdate = $_POST[ 'pdate' ];
+			$pdate = date( "Y-m-d", strtotime( $pdate ) );
+			$staff = $_POST[ 'teachers' ];
+			$pfrom = $_POST[ 'pfrom' ];
+			$manufacturer = $_POST[ 'manufacturer' ];
+			$model = $_POST[ 'model' ];
+			$sn = $_POST[ 'sn' ];
+			$condition = $_POST[ 'condition' ];
+			$warranty = $_POST[ 'warranty' ];
+			$warend = $_POST[ 'warend' ];
+			$warend = date( "Y-m-d", strtotime( $warend ) );
+			$amount = $_POST[ 'amount' ];
+			$method = $_POST[ 'method' ];
+			$desc = $_POST[ 'desc' ];
+			$status = $_POST[ 'status' ];
 
+			if ( empty( $aname ) || empty( $pdate ) || empty( $pfrom ) || empty( $manufacturer ) || empty( $model ) || empty( $sn ) || empty( $condition ) || empty( $warend ) || empty( $warranty ) || empty( $amount ) || empty( $method ) || empty( $desc ) || empty( $status ) ) {
 
-		<?php
+				echo "<br /><font color='red'>Please complete all fields.</font><br />";
+			} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $aname ) ) {
+				echo "<br /><font color='red'>Illegal characters found in Asset name text field.</font><br />";
+			} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $pfrom ) ) {
+				echo "<br /><font color='red'>Illegal characters found in purchase from text field.</font><br />";
+			} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $manufacturer ) ) {
+				echo "<br /><font color='red'>Illegal characters found in manufacture text field.</font><br />";
+			} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $model ) ) {
+				echo "<br /><font color='red'>Illegal characters found in model text field.</font><br />";
+			} elseif ( !preg_match_all( "/[a-zA-Z0-9]/m", $sn ) ) {
+				echo "<br /><font color='red'>Illegal characters found in serial number text field.</font><br />";
+			} elseif ( !preg_match_all( "/[a-zA-Z]/m", $condition ) ) {
+				echo "<br /><font color='red'>Illegal characters found in condition text field.</font><br />";
+			} elseif ( !preg_match_all( "/[0-9]/m", $amount ) ) {
+				echo "<br /><font color='red'>Illegal characters found in value text field.</font><br />";
+			} elseif ( !preg_match_all( "/[0-9]/m", $warranty ) ) {
+				echo "<br /><font color='red'>Illegal characters found in warranty text field.</font><br />";
+			} else {
 
+				mysqli_query( $connection, "INSERT INTO `assets`(`ID`, `item_name`, `date`, `management_ID`, `purchase_from`, `model`, `manufacture`, `s/n`, `condition`, `warranty`, `method`, `warranty_end`, `worth`, `description`, `status`) 	VALUES('','$aname','$pdate',$staff,'$pfrom','$manufacturer','$model','$sn','$condition','$warranty','$method','$warend',$amount,'$desc','$status')" );
 
-		if ( isset( $_GET[ 'id' ] ) ) {
-			$delete_id = $_GET[ 'delete_id' ];
-			// sql to delete a record
-			mysqli_query( $connection, "DELETE FROM assets WHERE ID = $delete_id" )or die( mysqli_error( $connection ) );
-			echo "Update has been added to the news page successfully.";
+				echo "<br /><font color='green'>Assets has been added.</font><br />";
+			}
 		}
-
 		?>
-
-
-		<div id="delete_asset" class="modal custom-modal fade" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content modal-md">
-					<input type="hidden" name="delete_id">
-					<div class="modal-header">
-						<h4 class="modal-title">Delete Asset</h4>
-					</div>
-					<form>
-						<div class="modal-body card-box">
-							<p>Are you sure want to delete this asset?</p>
-							<div class="m-t-20"> <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-								<button type="submit" class="btn btn-danger">Delete</button>
+	<div id="add_asset" class="modal custom-modal fade" role="dialog">
+		<div class="modal-dialog">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<div class="modal-content modal-md">
+				<div class="modal-header">
+					<h4 class="modal-title">Add Asset</h4>
+				</div>
+				<div class="modal-body">
+					<form method="post" action="">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Asset Name</label>
+									<input class="form-control" name="aname" type="text">
+								</div>
 							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Purchase Date</label>
+									<div class="cal-icon"><input class="form-control datetimepicker" name="pdate" type="text">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Purchase From</label>
+									<input class="form-control" name="pfrom" type="text">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Manufacturer</label>
+									<input class="form-control" name="manufacturer" type="text">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Model</label>
+									<input class="form-control" name="model" type="text">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Serial Number</label>
+									<input class="form-control" name="sn" type="text">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Condition</label>
+									<input class="form-control" name="condition" type="text">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Warranty</label>
+									<input class="form-control" name="warranty" type="text" placeholder="In Months">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Warranty End</label>
+									<div class="cal-icon"><input class="form-control datetimepicker" name="warend" type="text">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Value</label>
+									<input class="form-control" name="amount" type="text">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Payment Method</label>
+									<select class="select floating" name="method" required="required">
+										<option value=""> -- Select -- </option>
+										<option value="Cash">Cash</option>
+										<option value="Direct Debit">Direct Debit</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-groups">
+									<label>Teachers</label>
+									<select name="teachers" required="required" class="select floating">
+										<option value=""> -- Select -- </option>
+										<?php
+										$query1 = mysqli_query( $connection, "SELECT ID, fname, lname  FROM management" );
+
+										while ( $row = mysqli_fetch_array( $query1 ) ) {
+											$id = $row[ 'ID' ];
+											$fn = $row[ 'fname' ];
+											$ln = $row[ 'lname' ];
+											?>
+										<option value="<?php echo $id ?>">
+											<?php echo $fn , " ", $ln ?>
+										</option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Description</label>
+									<textarea class="form-control" name="desc"></textarea>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Status</label>
+									<select class="select" name="status" required="required">
+										<option value=""> -- Select -- </option>
+										<option value="Pending">Pending</option>
+										<option value="Approved">Approved</option>
+										<option value="Deployed">Deployed</option>
+										<option value="Damaged">Damaged</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="m-t-20 text-center">
+							<button class="btn btn-primary" name="add">Add Asset</button>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
-
-
-		<!--ADD ASSET-->
-
-		<?php 
-		
-		if ( isset( $_POST[ 'add' ] ) ) {
-			
-			$aname = $_POST['aname'];
-			$pdate = $_POST['pdate'];
-			$pdate = date("Y-m-d",strtotime($pdate));
-			$staff = $_POST['teachers'];
-			$pfrom = $_POST['pfrom'];
-			$manufacturer = $_POST['manufacturer'];
-			$model = $_POST['model'];
-			$sn = $_POST['sn'];
-			$condition = $_POST['condition'];
-			$warranty = $_POST['warranty'];
-			$warend = $_POST['warend'];
-			$warend = date("Y-m-d",strtotime($warend));
-			$amount = $_POST['amount'];
-			$method = $_POST['method'];
-			$desc = $_POST['desc'];
-			$status = $_POST['status'];
-		
-		mysqli_query($connection, "INSERT INTO `assets`(`ID`, `item_name`, `date`, `management_ID`, `purchase_from`, `model`, `manufacture`, `s/n`, `condition`, `warrenty`, `method`, `warrenty_end`, `worth`, `description`, `status`) 	VALUES('','$aname','$pdate',$staff,'$pfrom','$manufacturer','$model','$sn','$condition','$warranty','$method','$warend',$amount,'$desc','$status')");
-			
-			echo "Success!";
-			
-		}					
-		?>
-
-		<div id="add_asset" class="modal custom-modal fade" role="dialog">
-			<div class="modal-dialog">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<div class="modal-content modal-md">
-					<div class="modal-header">
-						<h4 class="modal-title">Add Asset</h4>
-					</div>
-					<div class="modal-body">
-						<form method="post" action="">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Asset Name</label>
-										<input class="form-control" name="aname" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Purchase Date</label>
-										<div class="cal-icon"><input class="form-control datetimepicker" name="pdate" type="text">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Purchase From</label>
-										<input class="form-control" name="pfrom" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Manufacturer</label>
-										<input class="form-control" name="manufacturer" type="text">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Model</label>
-										<input class="form-control" name="model" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Serial Number</label>
-										<input class="form-control" name="sn" type="text">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Condition</label>
-										<input class="form-control" name="condition" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Warranty</label>
-										<input class="form-control" name="warranty" type="text" placeholder="In Months">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Warranty End</label>
-										<div class="cal-icon"><input class="form-control datetimepicker" name="warend" type="text">
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Value</label>
-										<input class="form-control" name="amount" type="text">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Payment Method</label>
-										<select class="select floating" name="method">
-											<option value=""> -- Select -- </option>
-											<option value="Cash">Cash</option>
-											<option value="Direct Debit">Direct Debit</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-groups">
-										<label>Teachers</label>
-										<select name="teachers" required class="select floating">
-											<option value=""> -- Select -- </option>
-											<?php
-											$query1 = mysqli_query( $connection, "SELECT ID, fname, lname  FROM management" );
-
-											while ( $row = mysqli_fetch_array( $query1 ) ) {
-												$id = $row[ 'ID' ];
-												$fn = $row[ 'fname' ];
-												$ln = $row[ 'lname' ];
-												?>
-											<option value="<?php echo $id ?>">
-												<?php echo $fn , " ", $ln ?>
-											</option>
-											<?php } ?>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Description</label>
-										<textarea class="form-control" name="desc"></textarea>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Status</label>
-										<select class="select" name="status">
-											<option value=""> -- Select -- </option>
-											<option value="Pending">Pending</option>
-											<option value="Approved">Approved</option>
-											<option value="Deployed">Deployed</option>
-											<option value="Damaged">Damaged</option>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="m-t-20 text-center">
-								<button class="btn btn-primary" name="add">Add Asset</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-
-		<!--edit assets-->
-		<?php
-		
-			if ( isset( $_POST[ 'edit' ] ) ) {
-			
-			$id = $_POST[ 'edit_id' ];
-			$aname = $_POST['aname'];
-			$pdate = $_POST['pdate'];
-			$pdate = date("Y-m-d",strtotime($pdate));
-			$staff = $_POST['teachers'];
-			$pfrom = $_POST['pfrom'];
-			$manufacturer = $_POST['manufacturer'];
-			$model = $_POST['model'];
-			$sn = $_POST['sn'];
-			$condition = $_POST['condition'];
-			$warranty = $_POST['warranty'];
-			$warend = $_POST['warend'];
-			$warend = date("Y-m-d",strtotime($warend));
-			$amount = $_POST['amount'];
-			$method = $_POST['method'];
-			$desc = $_POST['desc'];
-			$status = $_POST['status'];
-			
-		
-			mysqli_query($connection, "UPDATE `assets` SET `item_name`= '$aname', `date`= '$pdate', `management _ ID`= $staff, `purchase_from`= '$pfrom', `model`= '$model', `manufacture`= '$manufacturer', `s/n`= '$sn', `condition`= '$condition', `warrenty`= '$warranty', `method`= '$method', `warrenty_end`= '$warend', `worth`= $amount, `description`= '$desc', `status`= '$status' WHERE ID = $id");
-				
-				
-		/*		UPDATE `assets` SET 
-`item_name`= 'aname', 
-`date`= 'pdate',
-`management_ID`=2 ,
-`purchase_from`= 'pfrom',
-`model`= 'model', 
-`manufacture`= 'manufacturer',
-`s/n`= 'sn',
-`condition`= 'condition',
-`warrenty`= 2, 
-`method`= 'method',
-`warrenty_end`= 'warend',
-`worth`= 5,
-`description`= '$desc',
-`status`= '$status' 
-WHERE ID = 7*/
-			
-			
-			echo "Success!";
-		}
-		?>
-		
-
-		<div id="edit_asset" class="modal custom-modal fade" role="dialog">
-			<div class="modal-dialog">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<div class="modal-content modal-md">
-					<div class="modal-header">
-						<h4 class="modal-title">Edit Asset</h4>
-					</div>
-					<div class="modal-body">
-					<input type="hidden" name="edit_id" value="<?php echo $id; ?>">
-						<form method="post" action="">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Asset Name <?php echo $id; ?> </label>
-										<input class="form-control" name="aname" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Purchase Date</label>
-										<div class="cal-icon"><input class="form-control datetimepicker" name="pdate" type="text">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Purchase From</label>
-										<input class="form-control" name="pfrom" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Manufacturer</label>
-										<input class="form-control" name="manufacturer" type="text">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Model</label>
-										<input class="form-control" name="model" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Serial Number</label>
-										<input class="form-control" name="sn" type="text">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Condition</label>
-										<input class="form-control" name="condition" type="text">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Warranty</label>
-										<input class="form-control" name="warranty" type="text" placeholder="In Months">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Warranty End</label>
-										<div class="cal-icon"><input class="form-control datetimepicker" name="warend" type="text">
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Value</label>
-										<input class="form-control" name="amount" type="text">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Payment Method</label>
-										<select class="select floating" name="method">
-											<option value=""> -- Select -- </option>
-											<option value="Cash">Cash</option>
-											<option value="Direct Debit">Direct Debit</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-groups">
-										<label>Teachers</label>
-										<select name="teachers" required class="select floating">
-											<option value=""> -- Select -- </option>
-											<?php
-											$query1 = mysqli_query( $connection, "SELECT ID, fname, lname  FROM management" );
-
-											while ( $row = mysqli_fetch_array( $query1 ) ) {
-												$id = $row[ 'ID' ];
-												$fn = $row[ 'fname' ];
-												$ln = $row[ 'lname' ];
-												?>
-											<option value="<?php echo $id ?>">
-												<?php echo $fn , " ", $ln ?>
-											</option>
-											<?php } ?>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Description</label>
-										<textarea class="form-control" name="desc"></textarea>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Status</label>
-										<select class="select" name="status">
-											<option value=""> -- Select -- </option>
-											<option value="Pending">Pending</option>
-											<option value="Approved">Approved</option>
-											<option value="Deployed">Deployed</option>
-											<option value="Damaged">Damaged</option>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="m-t-20 text-center">
-								<button class="btn btn-primary" name="update">Update and Save Asset</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
-
 	<div class="sidebar-overlay" data-reff="#sidebar"></div>
-	<script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="assets/js/dataTables.bootstrap.min.js"></script>
@@ -590,5 +574,4 @@ WHERE ID = 7*/
 	<script type="text/javascript" src="assets/js/bootstrap-datetimepicker.min.js"></script>
 	<script type="text/javascript" src="assets/js/app.js"></script>
 </body>
-
 </html>
