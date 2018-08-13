@@ -78,7 +78,6 @@
 						</div>
 						<div class="col-sm-3 col-md-2 col-xs-6">
 							<input type="submit" value="Search" name="search" class="btn btn-success btn-block"/>
-
 						</div>
 					</div>
 				</form>
@@ -166,7 +165,7 @@
 												<ul class="dropdown-menu pull-right">
 													<li><a href="javascript:void(0)" data-toggle="modal" data-target="#edit_salary<?php echo $id ?>" data-title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
 													</li>
-													<li><a href="#delete_salary" data-toggle="modal" data-target="#delete_salary<?php echo $id ?>" data-title="Delete"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+													<li><a href="javascript:void(0)" data-toggle="modal" data-target="#delete_salary<?php echo $id ?>" data-title="Delete"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
 													</li>
 												</ul>
 											</div>
@@ -356,23 +355,7 @@
 		</div>
 	</div>
 
-	<div id="delete_salary" class="modal custom-modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content modal-md">
-				<div class="modal-header">
-					<h4 class="modal-title">Delete Salary</h4>
-				</div>
-				<div class="modal-body card-box">
-					<p>Are you sure want to delete this?</p>
-					<div class="m-t-20 text-left">
-						<a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-						<a href="#" class="btn btn-danger">Delete</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	</div>
+
 
 	<div class="sidebar-overlay" data-reff="#sidebar"></div>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
