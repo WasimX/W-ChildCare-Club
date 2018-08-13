@@ -112,7 +112,6 @@
 										$tdate = str_replace( '/', '-', $to_date );
 										$tdate = date( 'Y-m-d', strtotime( $tdate ) );
 
-
 										if ( empty( $_POST[ 'date_from' ] ) && empty( $_POST[ 'date_to' ] ) ) {
 
 											$sql = "SELECT salary_m.sID AS s_id, salary_m.management_ID AS sm_id, salary_m.amount, management.ID, management.fname, management.lname, management.email, management.photo, management.date_join, management.job_role, salary_m.tdate, salary_m.period FROM management INNER JOIN  salary_m  ON management.ID = salary_m.management_ID WHERE management.fname LIKE '%" . $fname . "%' AND management.lname LIKE '%" . $lname . "%' AND management.job_role LIKE '%" . $role . "%'";
@@ -135,14 +134,13 @@
 											$tdate = $row[ 'tdate' ];
 											$amount = $row[ 'amount' ];
 											$photo = $row[ 'photo' ];
-
 											?>
 									<tr>
 										<td>
 											<?php echo $id ?>
 										</td>
 										<td>
-											<a href="profile.php"><img class="img-circle" src="<?php echo $row['photo']; ?>" width="40" alt="User"></a>
+											<a href="profile.php"><img class="img-circle" src="<?php echo $photo; ?>" width="40" alt="User"></a>
 											<h2><a href="profile.php"><?php echo $fname," ", $lname ?></a></h2>
 										</td>
 										<td>
@@ -266,7 +264,6 @@
 									if ( isset( $_POST[ 'delete' ] ) ) {
 										$id = $_POST[ 'delete_id' ];
 
-										// sql to delete a record
 										mysqli_query( $connection, "DELETE FROM salary_m WHERE sID = $id" )or die( mysqli_error( $connection ) );
 										echo "<br /><font color='green'>Record has been deleted</font><br />";
 									}
@@ -322,9 +319,13 @@
 							<select class="select" name="management">
 								<?php $result = mysqli_query($connection, "SELECT `ID`, `fname`, `lname` FROM `management`");
 											while ( $row = mysqli_fetch_array( $result ) ) {
+												$id = $row['ID'];
+												$fname = $row['fname'];
+												$lname = $row['lname'];
+
 									?>
-								<option value="<?php echo $row[ 'ID' ] ?>">
-									<?php echo $row ['fname']," ", $row ['lname'] ?> </option>
+								<option value="<?php echo $id ?>">
+									<?php echo $fname," ", $lname ?> </option>
 								<?php } ?>
 							</select>
 						</div>
@@ -349,13 +350,10 @@
 							<button class="btn btn-primary" name="submit" type="submit">Create Salary</button>
 						</div>
 					</form>
-
 				</div>
 			</div>
 		</div>
 	</div>
-
-
 
 	<div class="sidebar-overlay" data-reff="#sidebar"></div>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
